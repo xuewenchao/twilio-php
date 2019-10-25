@@ -167,6 +167,20 @@ class MessageInstance extends InstanceResource {
 
         throw new TwilioException('Unknown property: ' . $name);
     }
+    
+    /**
+     * Magic isset to access properties
+     *
+     * @param string $name Property to access
+     * @return boolean
+     */
+    public function __isset($name) {
+        if (array_key_exists($name, $this->properties)) {
+            return true;    
+        }
+        $getter = 'get' . ucfirst($name);
+        return method_exists($this, $getter);
+    }
 
     /**
      * Provide a friendly representation
